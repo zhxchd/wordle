@@ -9,6 +9,9 @@ class wordle:
         f.close()
         self.num_checks = 0
         self.max_check = max_check
+        self.done = False
+        # self.history = []
+        # self.alphabet = dict.fromkeys(string.ascii_lowercase, 0)
         if ans is None:
             self.ans = random.sample(word_list, 1)[0]
             print("New wordle initialized with random answer!")
@@ -41,6 +44,12 @@ class wordle:
             self.__test_valid(guess)
         except ValueError as e:
             raise e
+        
+        if self.num_checks >= self.max_check:
+            raise ValueError("No more guess! You have reached maximum number of attempts.")
+        
+        if self.done:
+            raise ValueError("No more guess! You've already made it.")
 
         self.num_checks += 1
 
@@ -78,6 +87,7 @@ class wordle:
             print(dict[i], end="")
         
         if correct:
+            self.done = True
             print("\nCongrats! ({}/{})".format(self.num_checks, self.max_check))
         else:
             print("\nYou have", self.max_check - self.num_checks, "attempts left!")
